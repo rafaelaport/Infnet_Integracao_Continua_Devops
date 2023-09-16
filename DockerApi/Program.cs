@@ -9,6 +9,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+//Swagger já estava ativo no primeiro commit
 app.UseSwagger();
 app.UseSwaggerUI();
 
