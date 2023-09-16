@@ -1,7 +1,10 @@
+using DockerApi.HealthCheck;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHttpClient();
 
 // Add services to the container.
 
@@ -14,7 +17,9 @@ builder.Services.AddHealthChecks()
                 .AddSqlServer(connectionString: builder.Configuration.GetConnectionString("InfnetIntegracaoContinuaDevops"),
                               healthQuery: "SELECT 1",
                               name: "Database",
-                              failureStatus: Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy);
+                              failureStatus: Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy)
+                .AddUrlGroup(new Uri("http://httpbin.org/status/200"), "Api Terceiro Nao Autenticada")
+                .AddCheck<HealthCheckRandom>(name: "Api Terceiro Autenticada");
 
 builder.Services.AddHealthChecksUI(s =>
 {
